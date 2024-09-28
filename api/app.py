@@ -3,17 +3,31 @@ from flask_cors import CORS
 import json
 import sqlite3
 from MachineLearning.predict import predict_price
+import os
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-# Load the mappings for categories like airline names from a JSON file
-with open('MachineLearning/models/category_mapping.json', 'r') as f:
+# Definir o caminho absoluto para o arquivo category_mapping.json
+base_dir = os.path.dirname(os.path.abspath(__file__))
+json_path = os.path.join(base_dir, 'MachineLearning', 'models', 'category_mapping.json')
+
+# Carregar o arquivo JSON
+with open(json_path, 'r') as f:
     category_mapping = json.load(f)
+
 
 # Helper function to connect to the SQLite database (used for retrieving flight data)
 def connect_db():
-    return sqlite3.connect('../database/dropdown_data.db') 
+    # Get the base directory of the current script (app.py)
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # Construct the absolute path to the database
+    db_path = os.path.join(base_dir, '..', 'database', 'dropdown_data.db')
+    
+    # Connect to the database
+    return sqlite3.connect(db_path)
+
 
 ################################################################################
 # API route - dropdown-data - to get airline data for dropdowns in the frontend
