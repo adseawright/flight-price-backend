@@ -5,16 +5,20 @@ import numpy as np
 from sklearn.metrics import mean_squared_error
 import pytest
 import calendar
+import os
 
-# Function to dynamically load the trained model from the file system
 def carregar_modelo():
-    # Dynamically building the path to the saved model
-    base_dir = os.path.join('..', 'api', 'MachineLearning', 'models')
-    model_path = os.path.join(base_dir, 'modelo_final.pkl')
+    # Obtenha o caminho absoluto da raiz do projeto (onde o teste está sendo executado)
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Construindo o caminho relativo para o arquivo modelo_final.pkl
+    model_path = os.path.join(base_dir, '..', 'api', 'MachineLearning', 'models', 'modelo_final.pkl')
     
-    # Load and return the model
+    # Carregar e retornar o modelo
     modelo = joblib.load(model_path)
     return modelo
+
+
 
 # Test 1: Ensure the model is making predictions correctly
 def test_predicoes():
