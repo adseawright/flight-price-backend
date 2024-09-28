@@ -1,12 +1,14 @@
 import joblib
 import pandas as pd
+import os
 
-# Load the complete pipeline (model)
-pipeline = joblib.load('MachineLearning/models/modelo_final.pkl') 
+# Loads the complete pipeline (model)
+pipeline = joblib.load(os.path.join(os.path.dirname(__file__), 'models', 'modelo_final.pkl'))
+
 
 def predict_price(data):
     try:
-        # Extract the necessary fields from the input data
+        # Extracts the necessary fields from the input data
         airline = data['airline']
         from_location = data['from']
         to_location = data['to']
@@ -20,7 +22,7 @@ def predict_price(data):
         dep_day = int(data['day'])
         dep_month = int(data['month'])
 
-        # Create a DataFrame with the same columns used during training
+        # Creates a DataFrame with the same columns used during training
         input_df = pd.DataFrame({
             'airline': [airline],
             'from': [from_location],
@@ -36,7 +38,7 @@ def predict_price(data):
             'month': [dep_month]
         })
 
-        # Perform prediction using the complete pipeline
+        # Performs prediction using the complete pipeline
         predicted_price = pipeline.predict(input_df)
 
         return predicted_price[0]
